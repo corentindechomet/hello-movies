@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import type { Genre } from '~/types/genre';
-import type { Movie } from '~/types/movie';
+import type { Movie } from '@/types/movie';
+import MovieCard from '@/components/MovieCard.vue';
 import { ref } from 'vue';
-import MovieCard from '~/components/MovieCard.vue';
 
 defineProps<{
   movies: Movie[]
-  genres: Genre[]
+  resultsNumber?: number
 }>();
 
 const emit = defineEmits(['scrollEnd']);
@@ -36,9 +35,16 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <p
+    v-if="resultsNumber"
+    class="text-slate-400 font-bold text-sm mb-2"
+  >
+    {{ resultsNumber }} résultat{{ resultsNumber > 1 ? 's' : '' }}
+  </p>
+
   <ul class="grid grid-cols-4 gap-4">
     <li v-for="movie in movies" :key="movie.id">
-      <MovieCard :movie="movie" :genres="genres" />
+      <MovieCard :movie="movie" />
     </li>
     <span ref="loadMoreAnchor" class="h-1 w-full" />
   </ul>

@@ -6,7 +6,7 @@ export default defineVitestConfig({
     globals: true,
     coverage: {
       provider: 'v8',
-      include: ['components/**/*', 'pages/**/*'],
+      include: ['components/**/*', 'pages/**/*', 'composables/**/*'],
     },
   },
 });

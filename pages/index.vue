@@ -1,50 +1,61 @@
 <script setup lang="ts">
-import type { Genre } from '@/types/genre';
-import type { Movie } from '@/types/movie';
-import { ref } from 'vue';
+import { useMoviesSearch } from '@/composables/useMoviesSearch';
+import { usePopularMovies } from '@/composables/usePopularMovies';
 
-const { data } = await useAsyncData('movies-and-genres', async () => {
-  const [moviesData, genresData] = await Promise.all([
-    $fetch<{ results: Movie[] }>('/api/movies/popular?page=1'),
-    $fetch<{ genres: Genre[] }>('/api/movies/genres'),
-  ]);
+const { popularMovies, loadMorePopularMovies } = usePopularMovies();
 
-  return {
-    movies: moviesData.results,
-    genres: genresData.genres,
-  };
-});
-
-const movies = ref<Movie[]>(data.value?.movies || []);
-const genres = ref<Genre[]>(data.value?.genres || []);
-
-const page = ref(1);
-const isLoading = ref(false);
-async function loadMoreMovies() {
-  if (isLoading.value)
-    return;
-
-  isLoading.value = true;
-  page.value++;
-  try {
-    const nextPage = await $fetch<{ results: Movie[] }>(
-      `/api/movies/popular?page=${page.value}`,
-    );
-    if (nextPage?.results) {
-      movies.value.push(...nextPage.results);
-    }
-  }
-  finally {
-    isLoading.value = false;
-  }
-}
+const { searchTerms, movies, resultsNumber, searchMovies, loadMoreMovies } = useMoviesSearch();
 </script>
 
 <template>
-  <div class="container mx-auto">
-    <h2 class="text-5xl font-black my-8">
-      Browse trending movies
+  <div class="container mx-auto py-16">
+    <h2 class="text-5xl font-black mb-8">
+      Search movies by title
     </h2>
-    <MovieList :movies="movies" :genres="genres" @scroll-end="loadMoreMovies" />
+    <form
+      class="max-w-md mb-8"
+      @submit.prevent="searchMovies"
+    >
+      <label for="search-for-movies" class="sr-only">Search</label>
+      <div class="relative flex items-center">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+          <Icon name="uil:search" class="text-gray-400" />
+        </div>
+        <input
+          id="search-for-movies"
+          v-model="searchTerms"
+          placeholder="e.g: Dune, Harry Potter, Interstellar, ..."
+          type="text"
+          class="w-full bg-slate-800 rounded p-4 ps-10 text-sm"
+          @keyup.enter="searchMovies"
+        >
+        <button
+          type="submit"
+          class="text-white absolute end-2.5 bg-pink-900 hover:bg-pink-950 font-medium rounded-lg text-sm px-4 py-2 cursor-pointer"
+        >
+          Search
+        </button>
+      </div>
+    </form>
+
+    <MovieList
+      v-if="searchTerms && movies.length"
+      :movies="movies"
+      :results-number="resultsNumber"
+      @scroll-end="loadMoreMovies"
+    />
+
+    <template v-else>
+      <div class="flex items-center w-full gap-8 my-16 text-slate-500">
+        <span class="h-0.5 w-full bg-slate-800" />
+        OR
+        <span class="h-0.5 w-full bg-slate-800" />
+      </div>
+
+      <h2 class="text-5xl font-black mb-8">
+        Browse trending movies
+      </h2>
+      <MovieList :movies="popularMovies" @scroll-end="loadMorePopularMovies" />
+    </template>
   </div>
 </template>

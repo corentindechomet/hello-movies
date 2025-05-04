@@ -1,7 +1,7 @@
+import MovieList from '@/components/MovieList.vue';
 import { genresMock } from '@/test/mocks/genre';
 import { movieMock } from '@/test/mocks/movie';
 import { mountSuspended } from '@nuxt/test-utils/runtime';
-import MovieList from '~/components/MovieList.vue';
 
 describe('movieList', () => {
   let observeMock: ReturnType<typeof vi.fn>;

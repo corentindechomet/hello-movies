@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import type { Genre } from '~/types/genre';
-import type { Movie } from '~/types/movie';
+import type { Movie } from '@/types/movie';
+import { useMoviesGenres } from '@/composables/useMoviesGenres';
 
 const props = defineProps<{
   movie: Movie
-  genres: Genre[]
 }>();
+
+const { genres } = useMoviesGenres();
 
 const imageBaseUrl = 'https://image.tmdb.org/t/p/w300';
 function getPoster(path: string | null) {
@@ -14,7 +15,7 @@ function getPoster(path: string | null) {
 
 const genresLabel = computed(() =>
   props.movie.genre_ids
-    .map(id => props.genres.find(genre => genre.id === id)?.name)
+    .map(id => genres.value.find(genre => genre.id === id)?.name)
     .join(', '),
 );
 </script>
@@ -27,7 +28,7 @@ const genresLabel = computed(() =>
       class="w-full h-full object-cover transition-transform duration-300 ease-in-out hover:scale-110"
     >
 
-    <p class="absolute top-0 backdrop-blur-sm bg-black/80 p-2 m-2 rounded-md text-xs opacity-75">
+    <p v-if="movie.genre_ids.length && genres.length" class="absolute top-0 backdrop-blur-sm bg-black/80 p-2 m-2 rounded-md text-xs opacity-75">
       {{ genresLabel }}
     </p>
 
