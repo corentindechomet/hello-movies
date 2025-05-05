@@ -21,7 +21,7 @@ const genresLabel = computed(() =>
 </script>
 
 <template>
-  <div class="relative overflow-hidden h-90" data-testid="movie-card">
+  <NuxtLink :to="`/movie/${movie.id}`" class="relative overflow-hidden h-90" data-testid="movie-card">
     <img
       :src="getPoster(movie.poster_path)"
       alt="Affiche du film"
@@ -41,5 +41,5 @@ const genresLabel = computed(() =>
         {{ movie.vote_average.toFixed(1) }}
       </p>
     </div>
-  </div>
+  </NuxtLink>
 </template>
