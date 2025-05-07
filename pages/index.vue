@@ -3,8 +3,15 @@ import { useMoviesSearch } from '@/composables/useMoviesSearch';
 import { usePopularMovies } from '@/composables/usePopularMovies';
 
 const { popularMovies, loadMorePopularMovies } = usePopularMovies();
-
 const { searchTerms, movies, resultsNumber, searchMovies, loadMoreMovies } = useMoviesSearch();
+
+const route = useRoute();
+const querySearchTerms = route.query.searchTerms;
+
+if (querySearchTerms) {
+  searchTerms.value = (querySearchTerms as string);
+  searchMovies();
+}
 </script>
 
 <template>

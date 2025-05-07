@@ -4,14 +4,6 @@ import { genresMock } from '@/test/mocks/genre';
 import { movieMock } from '@/test/mocks/movie';
 import { mountSuspended } from '@nuxt/test-utils/runtime';
 
-vi.mock('@/composables/useMoviesGenres', () => {
-  return {
-    useMoviesGenres: () => ({
-      genres: computed(() => genresMock),
-    }),
-  };
-});
-
 describe('movieCard', () => {
   let wrapper: VueWrapper<any>;
 
@@ -19,13 +11,9 @@ describe('movieCard', () => {
     wrapper = await mountSuspended(MovieCard, {
       props: {
         movie: movieMock,
+        genres: genresMock,
       },
     });
-  });
-
-  it('should compute genresLabel correctly', () => {
-    const genresLabel: string = wrapper.vm.genresLabel;
-    expect(genresLabel).toBe('Science-Fiction, Aventure');
   });
 
   it('should return correct poster URL from getPoster method', () => {

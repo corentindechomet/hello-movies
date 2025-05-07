@@ -6,6 +6,7 @@ export function useMoviesSearch() {
   const page = ref(1);
   const resultsNumber = ref(0);
   const isLoading = ref(false);
+  const router = useRouter();
 
   async function searchMovies() {
     if (isLoading.value)
@@ -22,6 +23,7 @@ export function useMoviesSearch() {
       resultsNumber.value = data.total_results;
     }
     finally {
+      router.push({ path: '/', query: { searchTerms: searchTerms.value } });
       isLoading.value = false;
     }
   }

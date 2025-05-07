@@ -1,12 +1,11 @@
 <script setup lang="ts">
+import type { Genre } from '@/types/genre';
 import type { Movie } from '@/types/movie';
-import { useMoviesGenres } from '@/composables/useMoviesGenres';
 
 const props = defineProps<{
   movie: Movie
+  genres: Genre[]
 }>();
-
-const { genres } = useMoviesGenres();
 
 const imageBaseUrl = 'https://image.tmdb.org/t/p/w300';
 function getPoster(path: string | null) {
@@ -15,7 +14,7 @@ function getPoster(path: string | null) {
 
 const genresLabel = computed(() =>
   props.movie.genre_ids
-    .map(id => genres.value.find(genre => genre.id === id)?.name)
+    .map(id => props.genres.find(genre => genre.id === id)?.name)
     .join(', '),
 );
 </script>

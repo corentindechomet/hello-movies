@@ -2,7 +2,7 @@
 import { useRatings } from '@/composables/useRatings';
 import Editor from '@tinymce/tinymce-vue';
 import useVuelidate from '@vuelidate/core';
-import { alpha, between, maxLength, minLength, required } from '@vuelidate/validators';
+import { alpha, between, helpers, maxLength, minLength, required } from '@vuelidate/validators';
 
 const props = defineProps<{
   movieId: string | string[]
@@ -17,6 +17,14 @@ const username = ref('');
 const message = ref('');
 const rating = ref();
 
+const maxLengthWithoutHtmlTags = helpers.withMessage(
+  'Message length must be between 3 and 500 characters',
+  helpers.withParams({ type: 'maxLengthWithoutHtmlTags' }, (value: string | null) => {
+    if (!value)
+      return false;
+    return value.replace(/<[^>]+(>|$)/g, '').length >= 3 && value.replace(/<[^>]+(>|$)/g, '').length <= 500;
+  }),
+);
 const rules = {
   username: {
     required,
@@ -27,7 +35,7 @@ const rules = {
   message: {
     required,
     minLength: minLength(3),
-    maxLength: maxLength(500),
+    maxLengthWithoutHtmlTags,
   },
   rating: {
     required,
@@ -69,7 +77,7 @@ async function submit() {
       <p class="font-bold">
         {{ comment.username }} <span class="text-xs opacity-50">({{ comment.rating }}/10)</span>
       </p>
-      <div class="text-sm mt-1" v-html="comment.message" />
+      <div class="text-sm mt-1 break-all" v-html="comment.message" />
     </div>
 
     <div class="w-2/3 mx-auto">
@@ -109,7 +117,7 @@ async function submit() {
 
         <div>
           <label for="rating">Rating</label>
-          <input id="rating" v-model.number="rating" type="number" min="1" max="10" class="border rounded p-2 w-20">
+          <input id="rating" v-model.number="rating" type="number" min="1" max="10" class="border rounded p-2 w-20 ml-2"> / 10
           <p v-if="v$.rating.$error" class="text-red-500 text-sm">
             {{ v$.rating.$errors[0].$message }}
           </p>
