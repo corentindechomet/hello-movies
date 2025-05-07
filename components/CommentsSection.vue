@@ -65,7 +65,7 @@ async function submit() {
 </script>
 
 <template>
-  <div class="p-12 pt-0 bg-linear-to-t/srgb from-white/25 to-transparent">
+  <div class="py-12 px-8 pt-0 bg-linear-to-t/srgb from-white/25 to-transparent">
     <h3 class="text-md font-semibold mb-2">
       Comments
     </h3>
@@ -80,7 +80,7 @@ async function submit() {
       <div class="text-sm mt-1 break-all" v-html="comment.message" />
     </div>
 
-    <div class="w-2/3 mx-auto">
+    <div class="md:w-2/3 mx-auto">
       <h2 class="text-lg font-bold mt-10">
         Leave a comment
       </h2>

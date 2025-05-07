@@ -15,7 +15,7 @@ if (querySearchTerms) {
 </script>
 
 <template>
-  <div class="container mx-auto py-16">
+  <div class="container mx-auto py-16 px-8 md:px-0">
     <h2 class="text-5xl font-black mb-8">
       Search movies by title
     </h2>

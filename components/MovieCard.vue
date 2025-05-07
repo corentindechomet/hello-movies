@@ -20,7 +20,7 @@ const genresLabel = computed(() =>
 </script>
 
 <template>
-  <NuxtLink :to="`/movie/${movie.id}`" class="relative overflow-hidden h-90" data-testid="movie-card">
+  <NuxtLink :to="`/movie/${movie.id}`" class="relative block overflow-hidden lg:h-80" data-testid="movie-card">
     <img
       :src="getPoster(movie.poster_path)"
       alt="Affiche du film"
@@ -31,7 +31,7 @@ const genresLabel = computed(() =>
       {{ genresLabel }}
     </p>
 
-    <div class="absolute bottom-0  w-full backdrop-blur-sm bg-black/60 p-4">
+    <div class="absolute bottom-0  left-0 right-0 w-full backdrop-blur-sm bg-black/60 p-4">
       <h3 class="text-sm font-bold uppercase">
         {{ movie.title }}
       </h3>

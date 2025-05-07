@@ -46,7 +46,7 @@ onUnmounted(() => {
     {{ resultsNumber }} résultat{{ resultsNumber > 1 ? 's' : '' }}
   </p>
 
-  <ul class="grid grid-cols-4 gap-4">
+  <ul class="grid grid-cols-1 gap-4 md:grid-cols-4 lg:grid-cols-5">
     <li v-for="movie in movies" :key="movie.id">
       <MovieCard :movie="movie" :genres="genres" />
     </li>

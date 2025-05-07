@@ -46,12 +46,12 @@ const moviePoster = computed(() => {
     :style="{ backgroundImage: `url(${movieBackdrop})` }"
   >
     <div class="flex flex-col bg-black/80 pb-0">
-      <a class="absolute top-10 ml-12 cursor-pointer flex items-center gap-2 transition hover:-translate-x-1  hover:bg-slate-500/50 rounded p-2" @click="$router.back()">
+      <a class="absolute top-10 ml-8 cursor-pointer flex items-center gap-2 transition hover:-translate-x-1  hover:bg-slate-500/50 rounded p-2" @click="$router.back()">
         <Icon name="material-symbols:arrow-back-rounded" />
         Back to movies list
       </a>
-      <div class="flex gap-10 mt-30 p-12">
-        <img v-if="moviePoster" :src="moviePoster" class="w-52 h-fit" alt="Affiche du film">
+      <div class="flex gap-10 mt-30 pb-12 px-8">
+        <img v-if="moviePoster" :src="moviePoster" class="hidden md:block w-52 h-fit" alt="Affiche du film">
         <div class="flex flex-col gap-8 max-w-150">
           <div class="flex flex-col gap-2">
             <h1 class="text-5xl font-extrabold">
