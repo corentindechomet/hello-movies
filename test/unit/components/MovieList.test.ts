@@ -2,6 +2,7 @@ import MovieList from '@/components/MovieList.vue';
 import { genresMock } from '@/test/mocks/genre';
 import { movieMock } from '@/test/mocks/movie';
 import { mountSuspended } from '@nuxt/test-utils/runtime';
+import { mount } from '@vue/test-utils';
 
 describe('movieList', () => {
   let observeMock: ReturnType<typeof vi.fn>;
@@ -22,6 +23,35 @@ describe('movieList', () => {
         thresholds: [],
       };
     });
+  });
+
+  it('displays singular results number label', () => {
+    const wrapper = mount(MovieList, {
+      props: {
+        movies: [movieMock],
+        resultsNumber: 1,
+      },
+    });
+    expect(wrapper.text()).toContain('1 résultat');
+  });
+
+  it('displays plural results number label', () => {
+    const wrapper = mount(MovieList, {
+      props: {
+        movies: [movieMock, movieMock, movieMock, movieMock, movieMock],
+        resultsNumber: 5,
+      },
+    });
+    expect(wrapper.text()).toContain('5 résultats');
+  });
+
+  it('does not displays results number label if resultsNumber is undefined', () => {
+    const wrapper = mount(MovieList, {
+      props: {
+        movies: [movieMock],
+      },
+    });
+    expect(wrapper.find('[data-testid="results-number"]').exists()).toBe(false);
   });
 
   it('renders a list of movie cards', async () => {

@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     tmdbApiKey: process.env.TMDB_API_KEY,
     public: {
       tmdbBaseUrl: 'https://api.themoviedb.org/3',
+      tinyMceApiKey: process.env.TINY_MCE_API_KEY,
     },
   },
   css: ['~/assets/css/main.css'],

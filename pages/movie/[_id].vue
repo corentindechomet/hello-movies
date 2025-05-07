@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import CastMember from '@/components/CastMember.vue';
 import { useMovieById } from '@/composables/useMovieById';
+import { useRatings } from '@/composables/useRatings';
 
 const route = useRoute();
 
 const { movie, cast, crew, fetchMovieById } = useMovieById();
-fetchMovieById(route.params._id);
+const movieId = ref(route.params._id);
+fetchMovieById(movieId.value);
+
+const { comments, averageRating } = useRatings(movieId.value);
 
 const directors = computed(() => {
   if (!crew.value?.length)
@@ -38,15 +42,15 @@ const moviePoster = computed(() => {
 <template>
   <div
     v-if="movie"
-    class="relative w-full min-h-screen bg-cover bg-center"
+    class="w-full min-h-screen bg-cover bg-center bg-fixed"
     :style="{ backgroundImage: `url(${movieBackdrop})` }"
   >
-    <div class="absolute flex items-center inset-0 bg-black/80 p-12">
-      <a class="absolute top-10 cursor-pointer flex items-center gap-2 transition hover:-translate-x-1  hover:bg-slate-500/50 rounded p-2" @click="$router.back()">
+    <div class="flex flex-col bg-black/80 pb-0">
+      <a class="absolute top-10 ml-12 cursor-pointer flex items-center gap-2 transition hover:-translate-x-1  hover:bg-slate-500/50 rounded p-2" @click="$router.back()">
         <Icon name="material-symbols:arrow-back-rounded" />
-        Retour
+        Back to movies list
       </a>
-      <div class="flex gap-10">
+      <div class="flex gap-10 mt-30 p-12">
         <img v-if="moviePoster" :src="moviePoster" class="w-52 h-fit" alt="Affiche du film">
         <div class="flex flex-col gap-8 max-w-150">
           <div class="flex flex-col gap-2">
@@ -65,11 +69,20 @@ const moviePoster = computed(() => {
           </ul>
           <div v-if="movie.vote_average" class="flex gap-4 items-end">
             <span>
-              <span class="text-2xl font-extrabold bg-pink-900 p-2 rounded">{{ movie.vote_average.toFixed(2) }}</span> / 10
+              TMDB ratings : <span class="text-2xl font-extrabold bg-pink-900 p-2 rounded">{{ movie.vote_average.toFixed(2) }}</span> / 10
             </span>
             <span class="flex items-center gap-2" title="Nombre de votants">
               <Icon name="material-symbols:group-outline-rounded" />
               {{ movie.vote_count }}
+            </span>
+          </div>
+          <div v-if="averageRating" class="flex gap-4 items-end">
+            <span>
+              HelloMovies users ratings : <span class="text-2xl font-extrabold bg-pink-900 p-2 rounded">{{ averageRating.toFixed(2) }}</span> / 10
+            </span>
+            <span class="flex items-center gap-2" title="Nombre de votants">
+              <Icon name="material-symbols:group-outline-rounded" />
+              {{ comments.length }}
             </span>
           </div>
           <div v-if="movie.genres" class="flex gap-2">
@@ -77,6 +90,7 @@ const moviePoster = computed(() => {
           </div>
         </div>
       </div>
+      <CommentsSection :movie-id="movieId" />
     </div>
   </div>
 </template>

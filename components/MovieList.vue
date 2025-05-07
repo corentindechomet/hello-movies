@@ -38,6 +38,7 @@ onUnmounted(() => {
   <p
     v-if="resultsNumber"
     class="text-slate-400 font-bold text-sm mb-2"
+    data-testid="results-number"
   >
     {{ resultsNumber }} résultat{{ resultsNumber > 1 ? 's' : '' }}
   </p>
